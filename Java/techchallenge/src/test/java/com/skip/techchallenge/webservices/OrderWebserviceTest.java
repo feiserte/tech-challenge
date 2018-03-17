@@ -19,7 +19,6 @@ public class OrderWebserviceTest {
     public void createOrder() {
 		CustomerDTO customer = new CustomerDTO();
 		customer.setName("Felipe");
-		customer.setId(1);
 		customer.setAddress("Rua artur prado 341");
 		
 		List<ProductDTO> productList = new ArrayList<ProductDTO>();
