@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 
+import com.skip.techchallenge.dao.CustomerDAO;
 import com.skip.techchallenge.dao.OrderDAO;
 import com.skip.techchallenge.dao.OrderItemDAO;
 import com.skip.techchallenge.model.CustomerDTO;
@@ -26,6 +27,7 @@ public class OrderBO {
 
 	private final Logger logger = Logger.getLogger(OrderBO.class);
 
+	private CustomerDAO customerDAO = new CustomerDAO();
 	private OrderDAO orderDAO = new OrderDAO();
 	private OrderItemDAO orderItemDAO = new OrderItemDAO();
 
@@ -37,8 +39,17 @@ public class OrderBO {
 	 * @param productList
 	 * @return Order
 	 ************************************************************************************/
-	public OrderDTO createOrder(CustomerDTO customer, List<ProductDTO> productList) {
-
+	public OrderDTO createOrder(Integer customerId, List<ProductDTO> productList) {
+		CustomerDTO customer = null;
+		try {
+			customer = customerDAO.getUserById(customerId);
+		} catch (SQLException e1) {
+			String message = "Error trying to getCustomerById. Error: " + e1.getMessage();
+			logger.error(message);
+			e1.printStackTrace();
+			return null;
+		}
+		
 		if(productList == null || productList.size() == 0 ) {
 			return null;
 		}
@@ -66,15 +77,7 @@ public class OrderBO {
 
 		order.setId(orderId);
 
-		List<OrderItemDTO> orderList = new ArrayList<OrderItemDTO>();
-		orderList = productList.stream().map(p -> new OrderItemDTO(
-				order.getId(), 
-				p.getProductId(), 
-				p.getRestaurantId(), 
-				p.getPrice(), 
-				p.getQuantity(), 
-				p.getPrice() * p.getQuantity())
-				).collect(Collectors.toList());
+		List<OrderItemDTO> orderList = convertProductListToOrderItemList(productList, order);
 
 		for(OrderItemDTO orderItemDTO : orderList) {
 			try {
@@ -89,6 +92,25 @@ public class OrderBO {
 		order.setOrderItems(orderList);
 
 		return order;
+	}
+
+	/************************************************************************************
+	 * Objective: Covert a list of ProductDTO to a list of OrderItemDTO.
+	 * @param productList
+	 * @param order
+	 * @return list of order items
+	 *************************************************************************************/
+	private List<OrderItemDTO> convertProductListToOrderItemList(List<ProductDTO> productList, OrderDTO order) {
+		List<OrderItemDTO> orderList = new ArrayList<OrderItemDTO>();
+		orderList = productList.stream().map(p -> new OrderItemDTO(
+				order.getId(), 
+				p.getProductId(), 
+				p.getRestaurantId(), 
+				p.getPrice(), 
+				p.getQuantity(), 
+				p.getPrice() * p.getQuantity())
+				).collect(Collectors.toList());
+		return orderList;
 	}
 
 	/************************************************************************************

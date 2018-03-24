@@ -2,13 +2,14 @@ package com.skip.techchallenge.webservices;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skip.techchallenge.business.OrderBO;
-import com.skip.techchallenge.model.CustomerDTO;
 import com.skip.techchallenge.model.OrderDTO;
 import com.skip.techchallenge.model.ProductDTO;
 
@@ -19,11 +20,11 @@ import com.skip.techchallenge.model.ProductDTO;
 @RestController
 public class OrderWebservice {
 	
-	@RequestMapping("/createOrder")
-	public @ResponseBody OrderDTO createOrder(@RequestParam(value="customer") CustomerDTO customer, @RequestParam(value="productList") List<ProductDTO> productList) {
+	@RequestMapping(value = "/createOrder", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8")
+	public @ResponseBody OrderDTO createOrder(@RequestParam(value="customerId") Integer customerId, @RequestBody List<ProductDTO> productList) {
 		OrderBO bo = new OrderBO();
 		
-		return bo.createOrder(customer, productList);
+		return bo.createOrder(customerId, productList);
 	}
 	
 	@RequestMapping("/cancelOrder")

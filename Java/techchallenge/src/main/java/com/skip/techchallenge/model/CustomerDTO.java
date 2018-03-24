@@ -9,6 +9,25 @@ public class CustomerDTO {
 	private String address;
 	private String creationDate;
 	
+	public CustomerDTO() {
+		super();
+	}
+	
+	public CustomerDTO(Integer id, String name, String email, String passwword, String address, String creationDate) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.passwword = passwword;
+		this.address = address;
+		this.creationDate = creationDate;
+	}
+	
+	public CustomerDTO(Integer id) {
+		super();
+		this.id = id;
+	}
+
 	public Integer getId() {
 		return id;
 	}

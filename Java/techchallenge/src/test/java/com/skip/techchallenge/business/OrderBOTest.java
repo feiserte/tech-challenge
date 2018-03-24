@@ -6,7 +6,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.skip.techchallenge.model.CustomerDTO;
 import com.skip.techchallenge.model.OrderDTO;
 import com.skip.techchallenge.model.ProductDTO;
 
@@ -16,10 +15,7 @@ public class OrderBOTest {
 	
 	@Test
 	public void createOrder() {
-		CustomerDTO user = new CustomerDTO();
-		user.setName("Felipe");
-		user.setId(1);
-		user.setAddress("Rua artur prado 341");
+		Integer customerId = 1;
 		
 		List<ProductDTO> productList = new ArrayList<ProductDTO>();
 		productList.add(new ProductDTO( 
@@ -31,7 +27,7 @@ public class OrderBOTest {
 				3
 				));
 		
-		OrderDTO order = bo.createOrder(user, productList);
+		OrderDTO order = bo.createOrder(customerId, productList);
 		
 		Assert.assertNotNull(order);
 		Assert.assertEquals((Double)24.990000000000002, order.getTotal());

@@ -6,7 +6,6 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.skip.techchallenge.model.CustomerDTO;
 import com.skip.techchallenge.model.OrderDTO;
 import com.skip.techchallenge.model.ProductDTO;
 import com.skip.techchallenge.util.OrderStatusEnum;
@@ -17,9 +16,7 @@ public class OrderWebserviceTest {
 	
 	@Test
     public void createOrder() {
-		CustomerDTO customer = new CustomerDTO();
-		customer.setName("Felipe");
-		customer.setAddress("Rua artur prado 341");
+		Integer customerId = 1;
 		
 		List<ProductDTO> productList = new ArrayList<ProductDTO>();
 		productList.add(new ProductDTO( 
@@ -31,7 +28,7 @@ public class OrderWebserviceTest {
 				3
 				));
 		
-		OrderDTO order = ws.createOrder(customer, productList);
+		OrderDTO order = ws.createOrder(customerId, productList);
 
 		Assert.assertNotNull(order);
 		Assert.assertEquals((Double)24.990000000000002, order.getTotal());
